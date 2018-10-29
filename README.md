@@ -85,11 +85,12 @@ Run `minikube dashboard` to open minikube's admin interface in your browser, whi
 
 Clients can be built with Yocto. A complete guide to building a Yocto client is out of scope here, but you can follow the instructions for HERE OTA Connect to build a [QEMU](https://docs.atsgarage.com/quickstarts/qemuvirtualbox.html) or [Raspberry Pi](https://docs.atsgarage.com/quickstarts/raspberry-pi.html) client.
 
-However, OTA Community Edition supports only [**implicit provisioning**](https://github.com/advancedtelematic/aktualizr/blob/master/docs/implicit-provisioning.adoc) of devices, instead of automatic provisioning as available in HERE OTA Connect/ATS Garage. In an implicit provisioning process, the device must be pre-loaded with provisioning credentials signed by a root CA that OTA CE trusts. As a part of the setup performed by `make start` (specifically, the `new_server` function), this root CA is generated and stored in the `ota.ce` directory. Additionally, a **credentials.zip** file is created. You will find it in `ota-community-edition/generated/ota.ce/credentials.zip` after running `make start`.
+However, OTA Community Edition supports only [**implicit provisioning**](https://github.com/advancedtelematic/aktualizr/blob/master/docs/implicit-provisioning.adoc) of devices, instead of automatic provisioning as available in HERE OTA Connect/ATS Garage. In an implicit provisioning process, the device must be provided with provisioning credentials signed by a root CA that OTA CE trusts. As a part of the setup performed by `make start` (specifically, the `new_server` function), this root CA is generated and stored in the `ota.ce` directory. Additionally, a **credentials.zip** file is created. You will find it in `ota-community-edition/generated/ota.ce/credentials.zip` after running `make start`.
 
 You must supply your yocto build with the credentials.zip, and specify that you want to use implicit provisioning. Add the following lines to the `local.conf` of your Yocto build:
 
-    SOTA_CLIENT_PROV = "aktualizr-implicit-prov"
+    SOTA_CLIENT_PROV = "aktualizr-ca-implicit-prov"
+    SOTA_DEPLOY_CREDENTIALS = "0"
     SOTA_PACKED_CREDENTIALS = "/path/to/ota.ce/generated/credentials.zip"
 
 Note that, if your build machine is different from the machine where minikube is running, you'll need to forward ports on the minikube machine and modify the build machine's hosts file as described above.
