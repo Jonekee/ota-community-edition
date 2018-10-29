@@ -144,6 +144,10 @@ new_client() {
   ssh ${options} "root@${addr}" -p "${port}" "echo \"${gateway} ota.ce\" >> /etc/hosts"
   scp -P "${port}" ${options} "${device_dir}/client.pem" "root@${addr}:/var/sota/client.pem"
   scp -P "${port}" ${options} "${device_dir}/pkey.pem" "root@${addr}:/var/sota/pkey.pem"
+  # TODO: is root.crt available?
+  scp -P "${port}" ${options} "${device_dir}/root.crt" "root@${addr}:/var/sota/root.crt"
+  # TODO: echo autoprov.url > "${device_dir}/gateway.url"
+  scp -P "${port}" ${options} "${device_dir}/gateway.url" "root@${addr}:/var/sota/gateway.url"
 }
 
 new_server() {
